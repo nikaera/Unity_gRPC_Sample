@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package world;
+
+// ユーザ(カメラ)の位置情報
+message Transform_ {
+    float x = 1;
+    float y = 2;
+    float z = 3;
+}
+
+// ユーザ(カメラ)の回転情報
+message Rotation_ {
+    float eulerX = 1;
+    float eulerY = 2;
+    float eulerZ = 3;
+}
+
+// ユーザの情報
+message User {
+  // room.proto 内の Join RPC を使用した際に返却される user_id が設定される
+  string user_id = 1;
+  Transform_ transform = 2;
+  Rotation_ rotation = 3;
+}

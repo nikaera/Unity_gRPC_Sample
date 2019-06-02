@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package world;
+
+// 同一ディレクトリに存在する user.proto 内の定義を
+// room.proto 内で使用するために import する
+import "user.proto";
+
+service Room {
+  // 部屋に入室するために使用する RPC
+  // 部屋の ID を指定するとユーザ ID が発行される
+  rpc Join (JoinRequest) returns (JoinResponse) {}
+
+  // 部屋の情報を同期するために使用する RPC
+  // Join で発行されたユーザ ID とユーザの情報を部屋に送信すると同時に
+  // 部屋に参加しているユーザリスト及びその情報が取得出来る
+  rpc Sync (SyncRequest) returns (SyncResponse) {}
+
+  // 部屋から退出するために使用する RPC
+  // Sync が返却するユーザリストから指定したユーザを削除する
+  rpc Leave (LeaveRequest) returns (LeaveResponse) {}
+}
+
+message JoinRequest {
+  string room_id = 1;
+}
+message JoinResponse {
+  string user_id = 1;
+}
+
+message SyncRequest {
+  string room_id = 1;
+  User user = 2;
+}
+message SyncResponse {
+  // repeated 修飾子を付けると繰り返し参照可能な
+  // 配列のようなフィールドとして扱えるようになる
+  repeated User users = 1;
+}
+
+message LeaveRequest {
+  string room_id = 1;
+  string user_id = 2;
+}
+message LeaveResponse {}
